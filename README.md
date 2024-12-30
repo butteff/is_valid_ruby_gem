@@ -15,11 +15,11 @@ Install:
 #### check variables:
 
 ```ruby
-@@valid = IsValid.new #class initialization
+is_valid = IsValid.new #instance creation
 
 #variables validation:
-validation = @@valid.check(1, 'integer') #true or false
-validation = @@valid.check('ok, it works!', 'sentence') #true or false
+validation = is_valid.check(1, 'integer') #true or false
+validation = is_valid.check('ok, it works!', 'sentence') #true or false
 ```
 
 #### check hashes:
@@ -36,8 +36,8 @@ templates = {
     }
 }
 
-#class initialization:
-@@valid = IsValid.new(templates)
+#instance creation:
+is_valid = IsValid.new(templates)
 
 #hash to check:
 hash_data = {
@@ -46,7 +46,7 @@ hash_data = {
     interval: 10,
 }
 
-validation = @@valid.check_hash(hash_data, 'settings') #true or array of errors
+validation = is_valid.check_hash(hash_data, 'settings') #true or array of errors
 ```
 
 ## Own Validation Rules:
@@ -69,8 +69,8 @@ templates = {
 }
 
 
-#class initialization:
-@@valid = IsValid.new(templates, own_validators)
+#instance creation:
+is_valid = IsValid.new(templates, own_validators)
 
 #hash to check:
 hash_data = {
@@ -78,7 +78,7 @@ hash_data = {
     email: 'fakemail@example.com',
 }
 
-validation = @@valid.check_hash(hash_data, 'hey') #true or array of errors
+validation = is_valid.check_hash(hash_data, 'hey') #true or array of errors
 
 ```
 ## Validate a rule or nil:
@@ -96,8 +96,8 @@ templates = {
     }
 }
 
-#class initialization:
-@@valid = IsValid.new(templates)
+#instance creation:
+is_valid = IsValid.new(templates)
 
 #hash to check:
 hash_data_nil = {
@@ -110,8 +110,8 @@ hash_data = {
     girlfriend_name: 'Anna'
 }
 
-validation = @@valid.check_hash(hash_data, 'settings') #valid
-validation = @@valid.check_hash(hash_data_nil, 'settings') #valid too
+validation = is_valid.check_hash(hash_data, 'settings') #valid
+validation = is_valid.check_hash(hash_data_nil, 'settings') #valid too
 ```
 
 ## Existed Default Validators:

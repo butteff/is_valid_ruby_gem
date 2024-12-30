@@ -1,22 +1,18 @@
 # frozen_string_literal: true
 
+require_relative 'modules/validators'
+
+# Ruby Gem to make a validation of a variable or a hash, based on regular expressions
+# or own pre-defined validation templates in an easy way. See full documentation on GitHub.
 class IsValid
+  include Validators
+
+  @rules = {}
+  @templates = {}
+
   def initialize(templates = {}, rules = {})
-    @rules = {
-      integer: '^(\d)+$',
-      float: '^(\d)+.(\d)+$',
-      float_with_comma: '^(\d)+,(\d)+$',
-      word: '^(\w)+$',
-      words: '^(\w| )+$',
-      sentence: '^(\w| |,)+(\.|!|\?)$',
-      boolean: '^(1|0|true|false)$',
-      url: '^(http://|https://)(.)+\.(.)+$',
-      email: '^([a-z,A-Z,\-,\_,\.]*)@(.*)+\.(.*)$',
-      any: '(.*)+',
-      string: '(.*)+',
-      nil: nil
-    }
-    @rules = @rules.merge(rules)
+    validators = init_rules
+    @rules = validators.merge(rules)
     @templates = templates
   end
 
@@ -32,12 +28,14 @@ class IsValid
   def check_hash(hash_var, template)
     errors = []
     rules = @templates[template.to_sym]
-    if !rules.nil?
-      hash_var.each do |key, val|
-        errors << "#{key} is not valid, should be #{rules[key.to_sym]}" unless !rules[key.to_sym].nil? && check(val, rules[key.to_sym])
-      end
-    else
+    if rules.nil?
       p 'template with rules does not exist'
+    else
+      hash_var.each do |key, val|
+        unless !rules[key.to_sym].nil? && check(val, rules[key.to_sym])
+          errors << "#{key} is not valid, should be #{rules[key.to_sym]}"
+        end
+      end
     end
     errors.empty? ? true : errors
   end
