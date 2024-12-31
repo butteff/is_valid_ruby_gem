@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'modules/validators'
+require_relative 'modules/errors'
 
 # Ruby Gem to make a validation of a variable or a hash, based on regular expressions
 # or own pre-defined validation templates in an easy way. See full documentation on GitHub.
 class IsValid
   include Validators
+  include Errors
 
   @rules = {}
   @templates = {}
@@ -26,16 +28,17 @@ class IsValid
   end
 
   def check_hash(hash_var, template)
-    errors = []
     rules = @templates[template.to_sym]
-    if rules.nil?
-      p 'template with rules does not exist'
-    else
-      hash_var.each do |key, val|
-        unless !rules[key.to_sym].nil? && check(val, rules[key.to_sym])
-          errors << "#{key} is not valid, should be #{rules[key.to_sym]}"
-        end
-      end
+    return [error_no_template(template)] if rules.nil?
+
+    errors = []
+    hash_var.each do |key, val|
+      rule = rules[key.to_sym]
+      next if !rule.nil? && check(val, rule)
+
+      error = rule.nil? ? error_no_key(key, template) : error_not_valid(key, rule)
+      errors << error
+      errors << error_no_rule(rule) if !rule.nil? && !@rules&.keys&.include?(rule.to_sym)
     end
     errors.empty? ? true : errors
   end

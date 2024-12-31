@@ -19,9 +19,6 @@ jobs:
     continue-on-error: true
 
     steps:
-      - name: Change ImageMagick policy to allow pdf->png conversion.
-        run: sudo sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
-
       - name: Install Ghostscript
         run: sudo apt-get install -y ghostscript
       

@@ -98,6 +98,56 @@ describe IsValid do
         validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
         expect(validation).to eq(true)
       end
+
+      it 'checks if template exists' do
+        hash_data = {
+          country: 'Russia',
+          email: 'butteff.ru@gmail.com'
+        }
+        is_valid = IsValid.new
+        validation = is_valid.check_hash(hash_data, 'no_template') # true or array of errors
+        expect(validation).to eq(['template "no_template" with rules does not exist'])
+      end
+
+      it 'doesn\'t have some keys in the template' do
+        templates = {
+          hey: {
+            url: 'url'
+          }
+        }
+
+        # hash to check:
+        hash_data = {
+          url: 'https://butteff.ru/en/',
+          name: 'Sergei Illarionov'
+        }
+
+        # class initialization:
+        is_valid = IsValid.new(templates)
+
+        validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
+        expect(validation).to eq(['"name" key doesn\'t exist in the "hey" template'])
+      end
+
+      it 'test, that rule doesn\'t exist' do
+        templates = {
+          hey: {
+            url: 'not_exist'
+          }
+        }
+
+        # hash to check:
+        hash_data = {
+          url: 'https://butteff.ru/en/'
+        }
+
+        # class initialization:
+        is_valid = IsValid.new(templates)
+
+        validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
+        expect(validation).to eq(['url is not valid, should be not_exist',
+                                  "validation rule \"not_exist\" doesn't exist"])
+      end
     end
   end
 end
