@@ -11,11 +11,14 @@ class IsValid
 
   @rules = {}
   @templates = {}
+  @errors = {}
 
-  def initialize(templates = {}, rules = {})
+  def initialize(settings = {})
+    @templates = settings[:templates] || {}
+    @errors = settings[:errors] || {}
+    rules = settings[:rules] || {}
     validators = init_rules
     @rules = validators.merge(rules)
-    @templates = templates
   end
 
   def check(var, rule_name)
@@ -36,7 +39,7 @@ class IsValid
       rule = rules[key.to_sym]
       next if !rule.nil? && check(val, rule)
 
-      error = rule.nil? ? error_no_key(key, template) : error_not_valid(key, rule)
+      error = rule.nil? ? error_no_key(key, template) : error_not_valid(key, rule, @errors)
       errors << error
       errors << error_no_rule(rule) if !rule.nil? && !@rules&.keys&.include?(rule.to_sym)
     end

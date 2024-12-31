@@ -37,7 +37,7 @@ templates = {
 }
 
 #instance creation:
-is_valid = IsValid.new({templates: templates})
+is_valid = IsValid.new(templates)
 
 #hash to check:
 hash_data = {
@@ -70,7 +70,7 @@ templates = {
 
 
 #instance creation:
-is_valid = IsValid.new({templates: templates, rules: own_validators})
+is_valid = IsValid.new(templates, own_validators)
 
 #hash to check:
 hash_data = {
@@ -97,7 +97,7 @@ templates = {
 }
 
 #instance creation:
-is_valid = IsValid.new({templates: templates})
+is_valid = IsValid.new(templates)
 
 #hash to check:
 hash_data_nil = {
@@ -112,35 +112,6 @@ hash_data = {
 
 validation = is_valid.check_hash(hash_data, 'settings') #valid
 validation = is_valid.check_hash(hash_data_nil, 'settings') #valid too
-```
-## Own Error texts:
-
-You can have own error texts in an array of errors instead of standart texts, you can just add one more hash with these texts:
-
-```ruby
-require 'is_valid'
-
-templates = {
-    settings: {
-        url: 'url',
-        is_confirmed: 'boolean',
-        interval: 'integer'
-    }
-}
-
-hash_to_check = {
-    url: 'it is not an url',
-    is_confirmed: 'it is not about a boolean',
-    interval: 'not an integer'
-}
-
-errors = {
-    url: 'error text 1',
-    is_confirmed: 'error text 2',
-    interval: 'error text 3'
-}
-is_valid = IsValid.new({ templates: templates, errors: errors })
-is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2', 'error text 3'])
 ```
 
 ## Existed Default Validators:
@@ -160,9 +131,5 @@ is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2',
 ## Will be in next versions
 
 - Recursive hashes validation
+- own error messages
 - Additional validators
-
-## Documentation of old versions
-
-Old versions are pretty the same, but without all this new functionality, the main difference is inside an initialize.
-See old documentation for the details [README_old.md file]( https://github.com/butteff/is_valid_ruby_gem/blob/main/README_old.md "README_old.md file")

@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'is_valid'
-  s.version     = '0.1.5'
+  s.version     = '0.1.6'
   s.summary     = 'Validation of a variable or a hash, based on pre-defined or own easy rules'
   s.description = 'Ruby Gem to make a validation of a variable or a hash, based on regular expressions
   or own pre-defined validation templates in an easy way. See full documentation on GitHub.'

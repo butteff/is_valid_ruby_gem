@@ -20,7 +20,7 @@ describe IsValid do
           is_confirmed: true,
           interval: 10
         }
-        is_valid = IsValid.new(templates)
+        is_valid = IsValid.new({ templates: templates })
         expect(is_valid.check_hash(hash_to_check, 'settings')).to eq(true)
       end
 
@@ -38,7 +38,7 @@ describe IsValid do
           is_confirmed: true,
           interval: 10
         }
-        is_valid = IsValid.new(templates)
+        is_valid = IsValid.new({ templates: templates })
         expect(is_valid.check_hash(hash_to_check, 'settings')).to eq(['url_string_key is not valid, should be url'])
       end
 
@@ -67,7 +67,7 @@ describe IsValid do
           url: 'https://butteff.ru',
           email: 'butteff.ru@gmail.com'
         }
-        is_valid = IsValid.new(templates)
+        is_valid = IsValid.new({ templates: templates })
         expect(is_valid.check_hash(hash_to_check, 'settings')).to eq(true)
         expect(is_valid.check_hash(address_hash, 'address_book')).to eq(true)
       end
@@ -87,7 +87,7 @@ describe IsValid do
         }
 
         # class initialization:
-        is_valid = IsValid.new(templates, own_validators)
+        is_valid = IsValid.new({ templates: templates, rules: own_validators })
 
         # hash to check:
         hash_data = {
@@ -123,7 +123,7 @@ describe IsValid do
         }
 
         # class initialization:
-        is_valid = IsValid.new(templates)
+        is_valid = IsValid.new({ templates: templates })
 
         validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
         expect(validation).to eq(['"name" key doesn\'t exist in the "hey" template'])
@@ -142,7 +142,7 @@ describe IsValid do
         }
 
         # class initialization:
-        is_valid = IsValid.new(templates)
+        is_valid = IsValid.new({ templates: templates })
 
         validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
         expect(validation).to eq(['url is not valid, should be not_exist',

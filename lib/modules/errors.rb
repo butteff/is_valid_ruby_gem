@@ -10,8 +10,8 @@ module Errors
     "\"#{key}\" key doesn't exist in the \"#{template}\" template"
   end
 
-  def error_not_valid(key, rule)
-    "#{key} is not valid, should be #{rule}"
+  def error_not_valid(key, rule, error_texts)
+    error_texts[key.to_sym].nil? ? "#{key} is not valid, should be #{rule}" : error_texts[key.to_sym]
   end
 
   def error_no_rule(rule)
