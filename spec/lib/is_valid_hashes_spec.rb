@@ -123,7 +123,7 @@ describe IsValid do
         }
 
         # class initialization:
-        is_valid = IsValid.new({ templates: templates })
+        is_valid = IsValid.new({ templates: templates, all_keys: true })
 
         validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
         expect(validation).to eq(['"name" key doesn\'t exist in the "hey" template'])
@@ -145,8 +145,27 @@ describe IsValid do
         is_valid = IsValid.new({ templates: templates })
 
         validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
-        expect(validation).to eq(['url is not valid, should be not_exist',
-                                  "validation rule \"not_exist\" doesn't exist"])
+        expect(validation).to eq(["validation rule \"not_exist\" doesn't exist"])
+      end
+
+      it 'works if key does not exist in the validation template' do
+        templates = {
+          hey: {
+            url: 'url'
+          }
+        }
+
+        # hash to check:
+        hash_data = {
+          url: 'https://butteff.ru/en/',
+          more_value: 'test'
+        }
+
+        # class initialization:
+        is_valid = IsValid.new({ templates: templates })
+
+        validation = is_valid.check_hash(hash_data, 'hey') # true or array of errors
+        expect(validation).to eq(true)
       end
     end
   end

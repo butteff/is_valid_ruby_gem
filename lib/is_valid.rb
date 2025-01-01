@@ -12,36 +12,52 @@ class IsValid
   @rules = {}
   @templates = {}
   @errors = {}
+  @all_keys = false
 
   def initialize(settings = {})
     @templates = settings[:templates] || {}
     @errors = settings[:errors] || {}
+    @all_keys = settings[:all_keys] || false
     rules = settings[:rules] || {}
     validators = init_rules
     @rules = validators.merge(rules)
   end
 
-  def check(var, rule_name)
-    if rule_name[-1] == '*'
-      rule_name = rule_name[0..-2]
-      res = var.nil?
+  def check(val, rules)
+    validated = rules.is_a?(String) ? val.to_s.match?(@rules[rules.to_sym]) : check_one_of_rules(val, rules)
+    validated.is_a?(Array) ? false : validated
+  end
+
+  def rule_exists(rule)
+    !rule.nil? && @rules[rule.to_sym].nil?
+  end
+
+  def check_one_of_rules(val, rules, key = 'variable')
+    errors = []
+    rules.each do |rule|
+      if rule_exists(rule)
+        errors << error_no_rule(rule)
+      elsif !check(val, rule)
+        errors << error_not_valid(key, rule, @errors)
+      end
     end
-    res ||= @rules[rule_name.to_sym].nil? ? var.nil? : var.to_s.match?(@rules[rule_name.to_sym])
-    res
+    !errors.empty? && errors.length == rules.length ? errors : true
   end
 
   def check_hash(hash_var, template)
-    rules = @templates[template.to_sym]
-    return [error_no_template(template)] if rules.nil?
+    template_rules = @templates[template.to_sym]
+    return [error_no_template(template)] if template_rules.nil?
 
     errors = []
     hash_var.each do |key, val|
-      rule = rules[key.to_sym]
-      next if !rule.nil? && check(val, rule)
-
-      error = rule.nil? ? error_no_key(key, template) : error_not_valid(key, rule, @errors)
-      errors << error
-      errors << error_no_rule(rule) if !rule.nil? && !@rules&.keys&.include?(rule.to_sym)
+      rules = template_rules[key.to_sym]
+      if @all_keys && rules.nil?
+        errors << error_no_key(key, template)
+      elsif !rules.nil?
+        rules = [rules] if rules.is_a?(String)
+        validated = check_one_of_rules(val, rules, key)
+        errors += validated if validated != true
+      end
     end
     errors.empty? ? true : errors
   end

@@ -113,6 +113,62 @@ hash_data = {
 validation = is_valid.check_hash(hash_data, 'settings') #valid
 validation = is_valid.check_hash(hash_data_nil, 'settings') #valid too
 ```
+## Multiple validations:
+
+You can have multiple rules to validate. Just add it as an array of rules.
+```ruby
+is_valid.check('http://butteff.ru', ['email', 'url']) #true or false
+````
+or
+
+```ruby
+is_valid.check_one_of_rules('http://butteff.ru', ['email', 'url']) #true or an array of error texts
+```
+
+or with a hash template
+
+```ruby
+templates = {
+    settings: {
+        test_data: ['url', 'email'],
+        is_confirmed: ['boolean', 'integer'],
+        interval: ['integer', 'float']
+    }
+}
+
+hash_to_check = {
+    test_data: 'https://www.butteff.ru',
+    is_confirmed: 'true',
+    interval: '10'
+}
+
+is_valid = IsValid.new({ templates: templates })
+is_valid.check_hash(hash_to_check, 'settings') #true or array full of error texts
+```
+
+## Check keys to validate in a hash:
+
+You can check keys of your hash before a validation to know about if all the keys have rules to check.
+
+```ruby
+templates = {
+    settings: {
+        url: 'url'
+    }
+}
+
+hash_to_check = {
+    url: 'https://www.butteff.ru/en/',
+    is_confirmed: 'true',
+}
+
+is_valid = IsValid.new({ templates: templates })
+is_valid.check_hash(hash_to_check, 'settings') #true
+
+is_valid = IsValid.new({ templates: templates, all_keys: true })
+is_valid.check_hash(hash_to_check, 'settings') #exception ['validation rule "is_confirmed" doesn't exist']
+```
+
 ## Own Error texts:
 
 You can have own error texts in an array of errors instead of standart texts, you can just add one more hash with these texts:
@@ -153,14 +209,24 @@ is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2',
 * sentence
 * boolean
 * url
+* url_no_http
 * email
 * any
-* nil
+* uuid
+* date_time (YYYY-MM-DD HH:MM:SS)
+* date_ymd (YYYY-MM-DD)
+* date_dmy: (DD.MM.YYYY)
+* time_hms: (HH:MM:SS)
+* time_hm: (HH:MM)
+* timestamp
 
 ## Will be in next versions
 
-- Recursive hashes validation
-- Additional validators
+- nil validation
+- Equal and not equal keys in a hash (required or not functionality)
+- Recursive hashes validation to validate inner hashes
+- Additional pre-defined validators
+- More unit tests
 
 ## Documentation of old versions
 
