@@ -83,7 +83,7 @@ validation = is_valid.check_hash(hash_data, 'hey') #true or array of errors
 ```
 ## Validate a rule or nil:
 
-You can use asterics at the end of a validation rule to allow nil values:
+You can use 'nil' rule to validate nil values:
 
 ```ruby
 require 'is_valid'
@@ -92,7 +92,7 @@ require 'is_valid'
 templates = {
     settings: {
         name: 'string',
-        girlfriend_name: 'string*', #string or nil rule (because of *)
+        girlfriend_name: ['string', 'nil'] #string or nil rule
     }
 }
 
@@ -110,8 +110,11 @@ hash_data = {
     girlfriend_name: 'Anna'
 }
 
-validation = is_valid.check_hash(hash_data, 'settings') #valid
-validation = is_valid.check_hash(hash_data_nil, 'settings') #valid too
+is_valid.check_hash(hash_data, 'settings') #valid
+is_valid.check_hash(hash_data_nil, 'settings') #valid too
+
+name_var = nil
+is_valid.check(name_var, 'nil') #true
 ```
 ## Multiple validations:
 
@@ -222,7 +225,6 @@ is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2',
 
 ## Will be in next versions
 
-- nil validation
 - Equal and not equal keys in a hash (required or not functionality)
 - Recursive hashes validation to validate inner hashes
 - Additional pre-defined validators

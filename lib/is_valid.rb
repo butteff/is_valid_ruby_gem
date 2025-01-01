@@ -24,8 +24,12 @@ class IsValid
   end
 
   def check(val, rules)
-    validated = rules.is_a?(String) ? val.to_s.match?(@rules[rules.to_sym]) : check_one_of_rules(val, rules)
+    validated = rules.is_a?(String) ? check_or_nil(val, @rules[rules.to_sym]) : check_one_of_rules(val, rules)
     validated.is_a?(Array) ? false : validated
+  end
+
+  def check_or_nil(val, rule)
+    rule == 'nil' ? val.nil? : val.to_s.match?(rule)
   end
 
   def rule_exists(rule)

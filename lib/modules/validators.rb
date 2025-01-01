@@ -22,7 +22,8 @@ module Validators
       date_dmy: '^(\d{2})\.(\d{2})\.(\d{4})$',
       time_hms: '^(\d{2}):(\d{2}):(\d{2})$',
       time_hm: '^(\d{2}):(\d{2})$',
-      timestamp: '^(\d{10,})$'
+      timestamp: '^(\d{10,})$',
+      nil: 'nil'
     }
   end
 end
