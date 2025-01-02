@@ -268,6 +268,44 @@ is_valid.check_hash(hash_to_check_without_name, 'settings') #valid
 is_valid.check_hash(hash_to_check_without_url, 'settings') #not valid
 
 ```
+#### Recursive validation (deep level ruby hash validation)
+
+You can validate deep level of hashes in this way described bellow:
+
+```ruby
+template = {
+    persons: {
+    url: %w[url url_no_http],
+    email: 'email',
+    class: 'words',
+    classmates: 'hash',
+    people: 'hash',
+    boys: 'hash',
+    girls: 'hash'
+    }
+}
+
+hash_to_check = {
+    people: {
+        url: 'https://people-fake.website.com',
+        classmates: {
+            boys: {
+                class: 'boys class',
+                email: 'fake@boysmail.com',
+                url: 'www.boysclass.ru'
+            },
+            girls: {
+                class: 'girls class',
+                email: 'fake@girls-class.com',
+                url: 'https://www.girls-class.ru'
+            }
+        }
+    }
+}
+
+is_valid = IsValid.new({ templates: template })
+valid = is_valid.check_hash(hash_to_check, 'persons') #true
+```
 
 #### initialize instance overview:
 
@@ -314,7 +352,6 @@ is_valid = IsValid.new(params) #instance creation
 
 ## Will be in next versions
 
-- Recursive hashes validation to validate inner hashes
 - Additional pre-defined validators
 - More unit tests
 

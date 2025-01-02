@@ -60,14 +60,13 @@ class IsValid
     !errors.empty? && errors.length == rules.length ? errors : true
   end
 
-  def check_hash(hash_var, template)
+  def check_hash(hash_var, template, errors = [])
     template_rules = @templates[template.to_sym]
     return [error_no_template(template)] if template_rules.nil?
 
     req_errors = check_required(hash_var, template_rules)
     return req_errors unless req_errors.empty?
 
-    errors = []
     hash_var.each do |key, val|
       rules = template_rules[key.to_sym]
       if @all_keys && rules.nil?
@@ -76,9 +75,11 @@ class IsValid
         rules = [rules] if rules.is_a?(String)
         validated = check_one_of_rules(val, rules, key)
         errors += validated if validated != true
+        inner = check_hash(val, template, errors) if val.is_a?(Hash)
+        errors += inner if !inner.nil? && inner != true
       end
     end
-    errors.empty? ? true : errors
+    errors.empty? ? true : errors.uniq
   end
 
   def check_required(hash_var, template_rules)
