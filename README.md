@@ -316,7 +316,7 @@ params = {
     templates: {}, #template of validation rules
     rules: {}, #additional own created validators
     errors: {}, #own error texts based on keys
-    all_keys: false #check template to have all the same keys as a hash for a validation
+    all_keys: false, #check template to have all the same keys as a hash for a validation
     strict_types: false #strict types mode to check variable types too
 }
 

@@ -24,8 +24,13 @@ class IsValid
     @all_keys = settings[:all_keys] || false
     @strict_types = settings[:strict_types] || false
     rules = settings[:rules] || {}
+    types_hash = {}
+    TYPES.each do |type|
+      types_hash[type.to_sym] = type
+    end
     validators = init_rules
     @rules = validators.merge(rules)
+    @rules = @rules.merge(types_hash)
   end
 
   def check(val, rules)

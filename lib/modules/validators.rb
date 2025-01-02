@@ -27,13 +27,7 @@ module Validators
       # md5: '',
       # sha256: '',
       nil: 'nil',
-      any: 'any',
-      string: 'string',
-      array: 'array',
-      hash: 'hash',
-      class: 'class',
-      module: 'module',
-      symbol: 'symbol'
+      any: 'any'
     }
   end
 end
