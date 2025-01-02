@@ -31,6 +31,26 @@ describe IsValid do
         is_valid = IsValid.new
         expect(is_valid.check('hey', 'integer')).to eq(false)
       end
+
+      it 'this variable is a float' do
+        is_valid = IsValid.new
+        expect(is_valid.check(22.3, 'float')).to eq(true)
+      end
+
+      it 'this variable is a float string too' do
+        is_valid = IsValid.new
+        expect(is_valid.check('22.3', 'float')).to eq(true)
+      end
+
+      it 'this variable is a float with a comma string too' do
+        is_valid = IsValid.new
+        expect(is_valid.check('22,3', 'float_with_comma')).to eq(true)
+      end
+
+      it 'this variable is not a float with a comma' do
+        is_valid = IsValid.new
+        expect(is_valid.check(22, 'float_with_comma')).to eq(false)
+      end
     end
   end
 end

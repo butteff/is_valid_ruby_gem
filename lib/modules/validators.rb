@@ -8,14 +8,12 @@ module Validators
       float: '^(\d)+.(\d)+$',
       float_with_comma: '^(\d)+,(\d)+$',
       word: '^(\w)+$',
-      words: '^(\w| )+$',
+      words: '^((?!\d)(\w| ))+$',
       sentence: '^(\w| |,)+(\.|!|\?)$',
       boolean: '^(1|0|true|false)$',
       url: 'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)',
       url_no_http: '^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
       email: '^([a-z,A-Z,\-,\_,\.]*)@(.*)+\.(.*)$',
-      any: '(.*)+',
-      string: '^(.*)+$',
       uuid: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
       date_time: '^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$',
       date_ymd: '^(\d{4})-(\d{2})-(\d{2})$',
@@ -23,7 +21,14 @@ module Validators
       time_hms: '^(\d{2}):(\d{2}):(\d{2})$',
       time_hm: '^(\d{2}):(\d{2})$',
       timestamp: '^(\d{10,})$',
-      nil: 'nil'
+      nil: 'nil',
+      any: 'any',
+      string: 'string',
+      array: 'array',
+      hash: 'hash',
+      class: 'class',
+      module: 'module',
+      symbol: 'symbol'
     }
   end
 end

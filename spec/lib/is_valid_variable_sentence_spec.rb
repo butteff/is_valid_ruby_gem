@@ -46,6 +46,36 @@ describe IsValid do
         is_valid = IsValid.new
         expect(is_valid.check('is sentense valid? noooo!', 'sentence')).to eq(false)
       end
+
+      it 'this variable is a sentence with numbers' do
+        is_valid = IsValid.new
+        expect(is_valid.check('he is about 1990 year of his birth!', 'sentence')).to eq(true)
+      end
+
+      it 'this variable is a word' do
+        is_valid = IsValid.new
+        expect(is_valid.check('word', 'word')).to eq(true)
+      end
+
+      it 'this variable is about words' do
+        is_valid = IsValid.new
+        expect(is_valid.check('a few words', 'words')).to eq(true)
+      end
+
+      it 'this variable is not about words, it is a word' do
+        is_valid = IsValid.new
+        expect(is_valid.check('1', 'words')).to eq(false)
+      end
+
+      it 'this variable is not about words, it is about words and numbers' do
+        is_valid = IsValid.new
+        expect(is_valid.check('aaaa bbbb 111', 'words')).to eq(false)
+      end
+
+      it 'this variable is not about words, it is about words and numbers too' do
+        is_valid = IsValid.new
+        expect(is_valid.check('222 aaaa bbbb', 'words')).to eq(false)
+      end
     end
   end
 end

@@ -49,7 +49,7 @@ hash_data = {
 validation = is_valid.check_hash(hash_data, 'settings') #true or array of errors
 ```
 
-## Own Validation Rules:
+#### Own Validation Rules:
 
 You can add own regular expressions to have own validators of variables:
 
@@ -81,7 +81,7 @@ hash_data = {
 validation = is_valid.check_hash(hash_data, 'hey') #true or array of errors
 
 ```
-## Validate a rule or nil:
+#### Validate a rule or nil:
 
 You can use 'nil' rule to validate nil values:
 
@@ -116,7 +116,7 @@ is_valid.check_hash(hash_data_nil, 'settings') #valid too
 name_var = nil
 is_valid.check(name_var, 'nil') #true
 ```
-## Multiple validations:
+#### Multiple validations:
 
 You can have multiple rules to validate. Just add it as an array of rules.
 ```ruby
@@ -149,7 +149,40 @@ is_valid = IsValid.new({ templates: templates })
 is_valid.check_hash(hash_to_check, 'settings') #true or array full of error texts
 ```
 
-## Check keys to validate in a hash:
+#### Strict types:
+
+You can check variables based on types of the values too, just add strict_types: true in initialize
+
+```ruby
+templates = {
+    hey: {
+        number_int: 'integer',
+        number_float: 'float'
+    }
+}
+
+# hash to check:
+hash_data_types = {
+    number_int: 5,
+    number_float: 555.55
+}
+
+hash_data_texts = {
+    number_int: '5',
+    number_float: '555.55'
+}
+
+# class initialization:
+is_valid = IsValid.new({ templates: templates, strict_types: true })
+
+validation = is_valid.check_hash(hash_data_types, 'hey') # valid
+validation = is_valid.check_hash(hash_data_texts, 'hey') # not valid
+
+is_valid = IsValid.new({ templates: templates })
+validation = is_valid.check_hash(hash_data_texts, 'hey') # valid, because strict_types is false
+```
+
+#### Check keys to validate in a hash:
 
 You can check keys of your hash before a validation to know about if all the keys have rules to check.
 
@@ -172,7 +205,7 @@ is_valid = IsValid.new({ templates: templates, all_keys: true })
 is_valid.check_hash(hash_to_check, 'settings') #exception ['validation rule "is_confirmed" doesn't exist']
 ```
 
-## Own Error texts:
+#### Own Error texts:
 
 You can have own error texts in an array of errors instead of standart texts, you can just add one more hash with these texts:
 
@@ -202,6 +235,22 @@ is_valid = IsValid.new({ templates: templates, errors: errors })
 is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2', 'error text 3'])
 ```
 
+#### initialize instance overview:
+
+This is a short overview of initialized params:
+
+```ruby
+params = {
+    templates: {}, #template of validation rules
+    rules: {}, #additional own created validators
+    errors: {}, #own error texts based on keys
+    all_keys: false #check template to have all the same keys as a hash for a validation
+    strict_types: false #strict types mode to check variable types too
+}
+
+is_valid = IsValid.new(params) #instance creation
+```
+
 ## Existed Default Validators:
 * integer
 * float
@@ -222,6 +271,11 @@ is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2',
 * time_hms: (HH:MM:SS)
 * time_hm: (HH:MM)
 * timestamp
+* array
+* hash
+* class
+* module
+* symbol
 
 ## Will be in next versions
 
