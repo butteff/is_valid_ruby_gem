@@ -235,6 +235,40 @@ is_valid = IsValid.new({ templates: templates, errors: errors })
 is_valid.check_hash(hash_to_check, 'settings') #['error text 1', 'error text 2', 'error text 3'])
 ```
 
+#### Required params:
+
+You can set keys in a template with a "\_required" at the end to have a key in a validated hash as a required one:
+
+```ruby
+require 'is_valid'
+
+templates = {
+    settings: {
+        url_required: 'url',
+        site_name: 'string'
+    }
+}
+
+hash_to_check = {
+    url: 'https://butteff.ru',
+    site_name: 'gem overview'
+}
+
+hash_to_check_without_name = {
+    url: 'https://butteff.ru',
+}
+
+hash_to_check_without_url = {
+    site_name: 'gem overview'
+}
+
+is_valid = IsValid.new({ templates: templates})
+is_valid.check_hash(hash_to_check, 'settings') #valid
+is_valid.check_hash(hash_to_check_without_name, 'settings') #valid
+is_valid.check_hash(hash_to_check_without_url, 'settings') #not valid
+
+```
+
 #### initialize instance overview:
 
 This is a short overview of initialized params:
@@ -271,6 +305,7 @@ is_valid = IsValid.new(params) #instance creation
 * time_hms: (HH:MM:SS)
 * time_hm: (HH:MM)
 * timestamp
+* password
 * array
 * hash
 * class
@@ -279,7 +314,6 @@ is_valid = IsValid.new(params) #instance creation
 
 ## Will be in next versions
 
-- Equal and not equal keys in a hash (required or not functionality)
 - Recursive hashes validation to validate inner hashes
 - Additional pre-defined validators
 - More unit tests

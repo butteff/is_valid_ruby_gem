@@ -9,6 +9,9 @@ class IsValid
   include Validators
   include Errors
 
+  TYPES = %w[string array hash class module symbol].freeze
+  STRICT_TYPES = %w[integer float].freeze
+
   @rules = {}
   @templates = {}
   @errors = {}
@@ -33,10 +36,8 @@ class IsValid
   def check_with_types(val, rule_name)
     return true if rule_name == 'any'
     return val.nil? if rule_name == 'nil'
-    return val.is_a?(Object.const_get(rule_name.capitalize)) if %w[string array hash class module
-                                                                   symbol].include?(rule_name)
-    return val.is_a?(Object.const_get(rule_name.capitalize)) if @strict_types && %w[integer
-                                                                                    float].include?(rule_name)
+    return val.is_a?(Object.const_get(rule_name.capitalize)) if TYPES.include?(rule_name)
+    return val.is_a?(Object.const_get(rule_name.capitalize)) if @strict_types && STRICT_TYPES.include?(rule_name)
     return !val.nil? == val if @strict_types && rule_name == 'boolean'
 
     rule = @rules[rule_name.to_sym]
@@ -63,6 +64,9 @@ class IsValid
     template_rules = @templates[template.to_sym]
     return [error_no_template(template)] if template_rules.nil?
 
+    req_errors = check_required(hash_var, template_rules)
+    return req_errors unless req_errors.empty?
+
     errors = []
     hash_var.each do |key, val|
       rules = template_rules[key.to_sym]
@@ -75,5 +79,16 @@ class IsValid
       end
     end
     errors.empty? ? true : errors
+  end
+
+  def check_required(hash_var, template_rules)
+    errors = []
+    template_rules.each_key do |key|
+      if key.match?('_required$')
+        key = key.to_s.gsub(/_required$/, '')
+        errors << error_required_key(key) if hash_var[key.to_sym].nil?
+      end
+    end
+    errors
   end
 end
