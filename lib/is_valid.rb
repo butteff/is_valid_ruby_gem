@@ -43,7 +43,7 @@ class IsValid
     return val.nil? if rule_name == 'nil'
     return val.is_a?(Object.const_get(rule_name.capitalize)) if TYPES.include?(rule_name)
     return val.is_a?(Object.const_get(rule_name.capitalize)) if @strict_types && STRICT_TYPES.include?(rule_name)
-    return !val.nil? == val if @strict_types && rule_name == 'boolean'
+    return [true, false].include?(val) if @strict_types && rule_name == 'boolean'
 
     rule = @rules[rule_name.to_sym]
     val.to_s.match?(rule)

@@ -31,6 +31,31 @@ describe IsValid do
         is_valid = IsValid.new
         expect(is_valid.check('random', 'boolean')).to eq(false)
       end
+
+      it 'this variable is not a boolean, just a random word' do
+        is_valid = IsValid.new({ strict_types: true })
+        expect(is_valid.check(true, 'boolean')).to eq(true)
+      end
+
+      it 'this variable is not a boolean, just a random word' do
+        is_valid = IsValid.new({ strict_types: true })
+        expect(is_valid.check(false, 'boolean')).to eq(true)
+      end
+
+      it 'this variable is not a boolean, just a random word' do
+        is_valid = IsValid.new({ strict_types: true })
+        expect(is_valid.check(1, 'boolean')).to eq(false)
+      end
+
+      it 'this variable is not a boolean, just a random word' do
+        is_valid = IsValid.new({ strict_types: true })
+        expect(is_valid.check(0, 'boolean')).to eq(false)
+      end
+
+      it 'this variable is not a boolean, just a random word' do
+        is_valid = IsValid.new({ strict_types: true })
+        expect(is_valid.check('aaa', 'boolean')).to eq(false)
+      end
     end
   end
 end
